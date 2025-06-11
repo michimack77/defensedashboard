@@ -7,15 +7,24 @@ st.set_page_config(page_title="Defense Dashboard", layout="wide")
 # Sidebar UI
 st.sidebar.header("Filters")
 
-# ✅ Region Filter (Alphabetized & Updated List)
-regions = sorted(["AFRICOM", "CENTCOM", "EUCOM", "NORTHCOM", "SOUTHCOM", "SPACECOM", "CYBERCOM"])
+# ✅ Region Filter (Alphabetized & Updated List with PACOM)
+regions = sorted([
+    "AFRICOM",
+    "CENTCOM",
+    "CYBERCOM",
+    "EUCOM",
+    "NORTHCOM",
+    "PACOM",        # Newly added
+    "SOUTHCOM",
+    "SPACECOM"
+])
 selected_regions = st.sidebar.multiselect("Select Region(s)", regions)
 
-# ✅ Topic Filter (You can update this list later)
+# ✅ Topic Filter
 topics = ["Surface Warfare", "AEGIS", "Cyber", "Budget", "Taiwan", "China", "Russia"]
 selected_topics = st.sidebar.multiselect("Select Topic(s)", topics)
 
-# ✅ Date Range Picker (From - To)
+# ✅ Date Range Picker
 date_range = st.sidebar.date_input(
     "Select Date Range",
     value=(date(2024, 1, 1), date.today()),
@@ -37,7 +46,7 @@ if st.sidebar.button("Submit Source"):
         st.sidebar.warning("Please enter a valid URL.")
     else:
         st.sidebar.success(f"Source '{new_source_url}' submitted for region '{new_source_region}'")
-        # Future: Append to a database or trigger a webhook here
+        # Future: Append to database or trigger ingestion here
 
 # Main area
 st.title("🌐 U.S. Defense & Geopolitics News Feed")
