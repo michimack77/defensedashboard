@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date
+import feedparser
 
 # Page config
 st.set_page_config(page_title="Defense Dashboard", layout="wide")
@@ -7,37 +8,26 @@ st.set_page_config(page_title="Defense Dashboard", layout="wide")
 # Sidebar UI
 st.sidebar.header("Filters")
 
-# ✅ Region Filter (Alphabetized & Updated List with PACOM)
+# Region Filter
 regions = sorted([
-    "AFRICOM",
-    "CENTCOM",
-    "CYBERCOM",
-    "EUCOM",
-    "NORTHCOM",
-    "PACOM",        # Newly added
-    "SOUTHCOM",
-    "SPACECOM"
+    "AFRICOM", "CENTCOM", "CYBERCOM", "EUCOM",
+    "NORTHCOM", "PACOM", "SOUTHCOM", "SPACECOM"
 ])
 selected_regions = st.sidebar.multiselect("Select Region(s)", regions)
 
-# ✅ Topic Filter
+# Topic Filter
 topics = ["Surface Warfare", "AEGIS", "Cyber", "Budget", "Taiwan", "China", "Russia"]
 selected_topics = st.sidebar.multiselect("Select Topic(s)", topics)
 
-# ✅ Date Range Picker
+# Date Range Picker
 date_range = st.sidebar.date_input(
     "Select Date Range",
-    value=(date(2024, 1, 1), date.today()),
-    help="Choose a start and end date",
+    value=(date(2024, 1, 1), date.today())
 )
 
-if len(date_range) != 2:
-    st.sidebar.warning("Please select both a start and end date.")
-
-# ✅ Source URL Submission Panel
+# Source URL Submission Tool (UI only for now)
 st.sidebar.markdown("---")
 st.sidebar.subheader("Add New Source")
-
 new_source_url = st.sidebar.text_input("Paste Source URL")
 new_source_region = st.sidebar.selectbox("Assign Region", regions)
 
@@ -46,12 +36,16 @@ if st.sidebar.button("Submit Source"):
         st.sidebar.warning("Please enter a valid URL.")
     else:
         st.sidebar.success(f"Source '{new_source_url}' submitted for region '{new_source_region}'")
-        # Future: Append to database or trigger ingestion here
+        # Future enhancement: store this in database or feed list
 
-# Main area
-st.title("🌐 U.S. Defense & Geopolitics News Feed")
-
-st.write("🚧 This section will eventually list filtered news articles based on selected inputs.")
-st.write(f"**Regions:** {', '.join(selected_regions) if selected_regions else 'All'}")
-st.write(f"**Topics:** {', '.join(selected_topics) if selected_topics else 'All'}")
-st.write(f"**Date Range:** {date_range[0]} to {date_range[1]}" if len(date_range) == 2 else "")
+# 🔄 RSS Feed List (Expanded with USNI)
+rss_feeds = [
+    "https://www.defense.gov/News/News-Stories/RSS/",
+    "https://www.defense.gov/News/Feature-Stories/RSS/",
+    "https://feeds.feedburner.com/BreakingDefense",
+    "https://feeds.feedburner.com/defenseone/all",
+    "https://www.navy.mil/RSS/TopStories.xml",
+    "https://www.navy.mil/RSS/Press-Releases.xml",
+    "https://www.defensenews.com/m/rss/naval/",
+    "https://www.realcleardefense.com/rss",
+    "https:
